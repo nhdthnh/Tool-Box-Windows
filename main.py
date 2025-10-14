@@ -46,6 +46,9 @@ try:
     from Setting.StaticIP import static_ip_setting
     from Setting.Bitlocker import check_bitlocker, enable_bitlocker, disable_bitlocker
     from Setting.RemoveTrash import call_cleanup_routine
+    from Setting.RestoreDriver import restore_drivers
+    from Setting.SFC  import run_chkdsk, run_sfc_scan
+    from Setting.Registry import main as main_registry
     # Định nghĩa các hàm gọi với server list
     def activate_windows_with_servers():
         activate_windows(kms_servers)
@@ -89,6 +92,9 @@ except ImportError as e:
     def enable_bitlocker(): _dummy_func("Enable BitLocker")
     def disable_bitlocker(): _dummy_func("Disable BitLocker")
     def call_cleanup_routine(): _dummy_func("Remove Trash Files")
+    def restore_drivers(): _dummy_func("Restore Drivers")
+    def run_sfc_scan(): _dummy_func("Run SFC Scan")
+    def run_chkdsk(): _dummy_func("Run CHKDSK")
 # ------------------------------------
 
 
@@ -134,6 +140,7 @@ class SystemManagerApp:
 
             # Group System (Hệ thống/Cài đặt)
             {"text": "Backup Driver", "task": self.run_backup_drivers_tasks, "frame": self.system_frame},
+            {"text": "Restore Driver", "task": self.run_restore_drivers_tasks, "frame": self.system_frame},
             {"text": "System Info", "task": self.run_system_info_tasks, "frame": self.system_frame},
             {"text": "Set Timezone Location", "task": self.run_set_hanoi_time_task, "frame": self.system_frame},
             {"text": "Set Explorer This PC", "task": self.run_set_explorer_this_pc_task, "frame": self.system_frame},
@@ -147,7 +154,9 @@ class SystemManagerApp:
             {"text": "Enable BitLocker", "task": self.run_enable_bitlocker_task, "frame": self.system_frame},
             {"text": "Disable BitLocker", "task": self.run_disable_bitlocker_task, "frame": self.system_frame},
             {"text": "Remove Trash Files", "task": self.run_remove_trash_files_task, "frame": self.system_frame},
-
+            {"text": "Run SFC Scan", "task": self.run_sfc_scan_task, "frame": self.system_frame},
+            {"text": "Run CHKDSK", "task": self.run_chkdsk_task, "frame": self.system_frame},
+            {"text": "Registry", "task": main_registry, "frame": self.system_frame },
             # Group Network (Mạng)
             {"text": "Get WAN IP", "task": self.run_get_wan_ip_task, "frame": self.network_frame},
             {"text": "IPConfig", "task": self.run_ipconfig_task, "frame": self.network_frame},
@@ -321,6 +330,9 @@ class SystemManagerApp:
 
     def run_enable_win_update_task(self):
         enable_windows_update()
+    
+    def run_restore_drivers_tasks(self):
+        restore_drivers()
 
     def run_disable_win_update_task(self):
         disable_windows_update()
@@ -355,8 +367,13 @@ class SystemManagerApp:
         set_explorer_default_this_pc()
 
     def run_remove_explorer_default_task(self):
-        remove_explorer_default_setting()
-
+        remove_explorer_default_setting()   
+    
+    def run_sfc_scan_task(self):
+        run_sfc_scan()
+    
+    def run_chkdsk_task(self):
+        run_chkdsk()
     
     def run_static_ip_setting_task(self):
         static_ip_setting()
@@ -371,6 +388,8 @@ class SystemManagerApp:
         self._prompt_drive_and_run("Disable BitLocker", disable_bitlocker)
     def run_remove_trash_files_task(self):
         call_cleanup_routine()
+    def run_registry_editor_task(self):
+        main_registry()
 
     def _prompt_drive_and_run(self, title, action_func):
         """

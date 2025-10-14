@@ -49,12 +49,11 @@ def run_network_command(command, command_name):
         return False, f"UNKNOWN ERROR: {e}"
 
 def release_flush_renew_network():
-    """Performs the sequence of network commands: IP Release, DNS Flush, and IP Renew."""
+    """Performs the sequence of network commands: IP Release, and IP Renew."""
 
     # SEQUENCE OF COMMANDS TO EXECUTE (Windows specific)
     commands_sequence = [
         (['ipconfig', '/release'], "RELEASE IP ADDRESS"),
-        (['ipconfig', '/flushdns'], "FLUSH DNS CACHE"),
         (['ipconfig', '/renew'], "RENEW IP ADDRESS")
     ]
     
