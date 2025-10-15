@@ -136,3 +136,18 @@ def check_firewall_status():
     except Exception as ex:
         print(f"An unknown error occurred: {ex}")
         return None
+    
+
+def open_allow_app_through_firewall_ui_fix2_rundll():
+    """
+    Mở trực tiếp cửa sổ "Allowed apps" bằng lệnh rundll32, đáng tin cậy hơn.
+    """
+    print("Trying opening 'Allowed apps' by RunDLL32 command...")
+    # Lệnh mở cửa sổ Allowed apps:
+    command = 'rundll32 shell32.dll,Control_RunDLL "firewall.cpl"'
+    try:
+        # Thực hiện lệnh RunDLL32
+        subprocess.run(command, check=True, shell=True)
+        print("Opened 'Allowed apps' window.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error while executing RunDLL32 command: {e}")

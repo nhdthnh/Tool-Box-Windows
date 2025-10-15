@@ -34,7 +34,7 @@ try:
     # --- CÁC HÀM MỚI BẠN YÊU CẦU ---
     from Setting.DiskMonitor import run_diskpart_and_extract_ltr, print_device_usage_for_letters
     from Setting.WindowsUpdate import enable_windows_update, disable_windows_update
-    from Setting.Firewall import enable_firewall, disable_firewall
+    from Setting.Firewall import enable_firewall, disable_firewall, check_firewall_status, open_allow_app_through_firewall_ui_fix2_rundll
     from Setting.HanoiTime import set_windows_timezone_by_ip
     from Setting.GetWanIp import display_ip_wan
     from Setting.NetworkInfo import ipconfig
@@ -49,6 +49,7 @@ try:
     from Setting.RestoreDriver import restore_drivers
     from Setting.SFC  import run_chkdsk, run_sfc_scan
     from Setting.Registry import main as main_registry
+    from Setting.Menu import Menu 
     # Định nghĩa các hàm gọi với server list
     def activate_windows_with_servers():
         activate_windows(kms_servers)
@@ -95,6 +96,8 @@ except ImportError as e:
     def restore_drivers(): _dummy_func("Restore Drivers")
     def run_sfc_scan(): _dummy_func("Run SFC Scan")
     def run_chkdsk(): _dummy_func("Run CHKDSK")
+    def main_registry(): _dummy_func("Registry Editor")
+    def Menu(): _dummy_func("Context Menu Editor")
 # ------------------------------------
 
 
@@ -150,6 +153,8 @@ class SystemManagerApp:
             {"text": "Disable Windows Update", "task": self.run_disable_win_update_task, "frame": self.system_frame},
             {"text": "Enable Firewall", "task": self.run_enable_firewall_task, "frame": self.system_frame},
             {"text": "Disable Firewall", "task": self.run_disable_firewall_task, "frame": self.system_frame},
+            {"text": "Check Firewall Status", "task": self.run_check_firewall_task, "frame": self.system_frame},
+            {"text": "Open Firewall", "task": self.run_open_allow_app_firewall_ui_task, "frame": self.system_frame},
             {"text": "Check BitLocker", "task": self.run_check_bitlocker_task, "frame": self.system_frame},
             {"text": "Enable BitLocker", "task": self.run_enable_bitlocker_task, "frame": self.system_frame},
             {"text": "Disable BitLocker", "task": self.run_disable_bitlocker_task, "frame": self.system_frame},
@@ -157,6 +162,7 @@ class SystemManagerApp:
             {"text": "Run SFC Scan", "task": self.run_sfc_scan_task, "frame": self.system_frame},
             {"text": "Run CHKDSK", "task": self.run_chkdsk_task, "frame": self.system_frame},
             {"text": "Registry", "task": main_registry, "frame": self.system_frame },
+            {"text": "Menu context", "task": self.run_menu_task, "frame": self.system_frame },
             # Group Network (Mạng)
             {"text": "Get WAN IP", "task": self.run_get_wan_ip_task, "frame": self.network_frame},
             {"text": "IPConfig", "task": self.run_ipconfig_task, "frame": self.network_frame},
@@ -313,7 +319,9 @@ class SystemManagerApp:
         
     def run_system_info_tasks(self):
         get_system_info()
-        
+    
+    def run_menu_task(self):
+        Menu() 
         
     def run_backup_drivers_tasks(self):
         backup_drivers_cmd()
@@ -374,7 +382,12 @@ class SystemManagerApp:
     
     def run_chkdsk_task(self):
         run_chkdsk()
-    
+    def run_check_firewall_task(self):
+        check_firewall_status()
+
+    def run_open_allow_app_firewall_ui_task(self):
+        open_allow_app_through_firewall_ui_fix2_rundll()
+
     def run_static_ip_setting_task(self):
         static_ip_setting()
     def run_check_bitlocker_task(self):
